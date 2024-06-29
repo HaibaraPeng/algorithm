@@ -67,26 +67,22 @@ public class MergeSortedArray {
     //leetcode submit region begin(Prohibit modification and deletion)
     class Solution {
         public void merge(int[] nums1, int m, int[] nums2, int n) {
-            int[] temp = new int[m + n];
-            int i = 0, mi = 0, ni = 0;
-            while (mi < m || ni < n) {
-                if (mi < m && ni < n) {
-                    int min;
-                    if (nums1[mi] < nums2[ni]) {
-                        min = nums1[mi++];
+            int i = m + n - 1;
+            while (m > 0 || n > 0) {
+                if (m > 0 && n > 0) {
+                    int max;
+                    if (nums1[m - 1] < nums2[n - 1]) {
+                        max = nums2[--n];
                     } else {
-                        min = nums2[ni++];
+                        max = nums1[--m];
                     }
-                    temp[i] = min;
-                } else if (mi < m) {
-                    temp[i] = nums1[mi++];
+                    nums1[i] = max;
+                } else if (m > 0) {
+                    nums1[i] = nums1[--m];
                 } else {
-                    temp[i] = nums2[ni++];
+                    nums1[i] = nums2[--n];
                 }
-                i++;
-            }
-            for (int j = 0; j < m + n; j++) {
-                nums1[j] = temp[j];
+                i--;
             }
         }
     }
