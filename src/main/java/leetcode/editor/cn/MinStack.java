@@ -65,12 +65,12 @@ public class MinStack {
     }
 
     //leetcode submit region begin(Prohibit modification and deletion)
-    class MinStack {
+    class MinStack1 {
 
         Deque<Integer> stack;
         Deque<Integer> min;
 
-        public MinStack() {
+        public MinStack1() {
             stack = new java.util.ArrayDeque<>();
             min = new java.util.ArrayDeque<>();
         }
