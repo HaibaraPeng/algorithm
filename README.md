@@ -6,10 +6,7 @@
 
 - [项目介绍](#项目介绍)
 - [技术栈](#技术栈)
-- [题目分类](#题目分类)
 - [如何运行](#如何运行)
-- [贡献](#贡献)
-- [许可](#许可)
 
 ## 项目介绍
 
@@ -24,4 +21,4 @@
 
 1. 克隆该项目：
    ```bash
-   git clone https://github.com/your_username/algorithm.git
+   git clone https://github.com/HaibaraPeng/algorithm
