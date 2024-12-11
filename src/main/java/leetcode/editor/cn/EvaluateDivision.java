@@ -85,22 +85,19 @@ public class EvaluateDivision {
         public double[] calcEquation(List<List<String>> equations, double[] values, List<List<String>> queries) {
             // 1. 构建图
             buildGraph(equations, values);
-
             // 2. 遍历每个查询，使用DFS来查找路径上的乘积
             double[] results = new double[queries.size()];
             for (int i = 0; i < queries.size(); i++) {
-                String numerator = queries.get(i).get(0);
-                String denominator = queries.get(i).get(1);
-                if (!graph.containsKey(numerator) || !graph.containsKey(denominator)) {
+                String start = queries.get(i).get(0);
+                String end = queries.get(i).get(1);
+                if (!graph.containsKey(start) || !graph.containsKey(end)) {
                     results[i] = -1.0;
-                } else if (numerator.equals(denominator)) {
+                } else if (start.equals(end)) {
                     results[i] = 1.0;
                 } else {
-                    Set<String> visited = new HashSet<>();
-                    results[i] = dfs(numerator, denominator, 1.0, visited);
+                    results[i] = dfs(start, end, 1.0, new HashSet<>());
                 }
             }
-
             return results;
         }
 
@@ -109,18 +106,12 @@ public class EvaluateDivision {
          */
         private void buildGraph(List<List<String>> equations, double[] values) {
             for (int i = 0; i < equations.size(); i++) {
-                String var1 = equations.get(i).get(0);
-                String var2 = equations.get(i).get(1);
-                double value = values[i];
-
-                // 初始化邻接表的节点
-                graph.putIfAbsent(var1, new HashMap<>());
-                graph.putIfAbsent(var2, new HashMap<>());
-
-                // var1 -> var2 的比率
-                graph.get(var1).put(var2, value);
-                // var2 -> var1 的比率（倒数）
-                graph.get(var2).put(var1, 1.0 / value);
+                String key = equations.get(i).get(0);
+                String value = equations.get(i).get(1);
+                graph.putIfAbsent(key, new HashMap<>());
+                graph.putIfAbsent(value, new HashMap<>());
+                graph.get(key).put(value, values[i]);
+                graph.get(value).put(key, 1 / values[i]);
             }
         }
 
@@ -132,22 +123,19 @@ public class EvaluateDivision {
                 return product;
             }
 
-            // 标记当前节点为已访问
             visited.add(current);
 
-            // 遍历当前节点的邻接点
-            Map<String, Double> neighbors = graph.get(current);
-            for (String neighbor : neighbors.keySet()) {
-                if (visited.contains(neighbor)) continue;
-
-                double result = dfs(neighbor, target, product * neighbors.get(neighbor), visited);
-                if (result != -1.0) {
+            Map<String, Double> map = graph.get(current);
+            for (Map.Entry<String, Double> entry : map.entrySet()) {
+                if (visited.contains(entry.getKey())) {
+                    continue;
+                }
+                double result = dfs(entry.getKey(), target, product * entry.getValue(), visited);
+                if (result != -1) {
                     return result;
                 }
             }
-
-            // 没有找到路径，回溯
-            return -1.0;
+            return -1;
         }
     }
 //leetcode submit region end(Prohibit modification and deletion)
